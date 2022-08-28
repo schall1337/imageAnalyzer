@@ -1,0 +1,7 @@
+from pdfimages_extractImages import extractImages
+from pdfimages_getImagesDetails import getImageDetailList
+from pdfimages_mapImagePathToDetails import mapImagePathToDetails
+
+extractImages()
+imageDetailList = getImageDetailList()
+mapImagePathToDetails(imageDetailList)
