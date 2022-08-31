@@ -1,18 +1,18 @@
 import subprocess
 import re
 
-pathOfPdf = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\python_modell_ba\\main\\resources\\same_pic_diff_sizes.pdf"
+#pathOfPdf = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\python_modell_ba\\main\\resources\\same_pic_diff_sizes.pdf"
 SCRIPT_NAME = "pdfimages_getImagesDetails"
 
-def getImageDetailList():
-    subprocessResult = runPdfimagesSubprocess()
+def getImageDetailList(pathOfPdf):
+    subprocessResult = runPdfimagesSubprocess(pathOfPdf)
     if validatePdfimagesResult(subprocessResult):
         pdfimagesResultList = subprocessResult.stdout
         imageResults = getResultAsJsonArray(pdfimagesResultList)
         return imageResults
 
 
-def runPdfimagesSubprocess():
+def runPdfimagesSubprocess(pathOfPdf):
     return subprocess.run(["pdfimages", "-list", pathOfPdf], capture_output=True, text=True, check=True)
 
 
@@ -59,7 +59,10 @@ def mapResultToJson(imageValueArray):
         "y-ppi": imageValueArray[13],
         "size": imageDetails,
         "ratio": imageValueArray[15],
-        "fileName": ""
+        "fileName": "",
+        "reverseImageDetection": "",
+        "coordinates": "",
+        "isTooCloseToBorder": False
     }
     return imageModell
 

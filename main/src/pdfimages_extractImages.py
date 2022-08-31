@@ -1,17 +1,17 @@
 import subprocess
 
-pathOfPdf = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\python_modell_ba\\main\\resources\\same_pic_diff_sizes.pdf"
+#pathOfPdf = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\python_modell_ba\\main\\resources\\same_pic_diff_sizes.pdf"
 
-pathOfOutput = "..\\tmp\\image"
+pathOfOutput = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\tmp\\tmp"
 
 SCRIPT_NAME = "pdfimages_extractImages"
 
-def extractImages():
-    subprocessResult = runPdfimagesSubprocess()
+def extractImages(pathOfPdf):
+    subprocessResult = runPdfimagesSubprocess(pathOfPdf)
     return validatePdfimagesResult(subprocessResult)
 
 
-def runPdfimagesSubprocess():
+def runPdfimagesSubprocess(pathOfPdf):
     return subprocess.run(["pdfimages", "-all", pathOfPdf, pathOfOutput], capture_output=True, text=True, check=True)
 
 
