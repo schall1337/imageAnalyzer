@@ -62,7 +62,8 @@ def mapResultToJson(imageValueArray):
         "fileName": "",
         "reverseImageDetection": "",
         "coordinates": "",
-        "isTooCloseToBorder": False
+        "isTooCloseToBorder": False,
+        "exif": ""
     }
     return imageModell
 

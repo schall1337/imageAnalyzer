@@ -38,9 +38,12 @@ def isImageInsideBorder(imageDetailList, pathOfPdf):
     for imageDetail in imageDetailList:
         imagePointTopLeft = imageDetail["coordinates"]["top_left"]
         imagePointBottomRight = imageDetail["coordinates"]["bottom_right"]
-        if not borderPointTopLeft["x"] < imagePointTopLeft["x"] < borderPointBottomRight["x"] and borderPointTopLeft["y"] < imagePointTopLeft["y"] < borderPointBottomRight["y"]:
+        if not (borderPointTopLeft["x"] < imagePointTopLeft["x"] < borderPointBottomRight["x"] and borderPointTopLeft["y"] < imagePointTopLeft["y"] < borderPointBottomRight["y"]):
             imageDetail["isTooCloseToBorder"] = True
-        if not borderPointTopLeft["x"] < imagePointBottomRight["x"] < borderPointBottomRight["x"] and borderPointTopLeft["y"] < imagePointBottomRight["y"] < borderPointBottomRight["y"]:
+            continue
+
+        if not (borderPointTopLeft["x"] < imagePointBottomRight["x"] < borderPointBottomRight["x"] and borderPointTopLeft["y"] < imagePointBottomRight["y"] < borderPointBottomRight["y"]):
             imageDetail["isTooCloseToBorder"] = True
+
     return imageDetailList
 

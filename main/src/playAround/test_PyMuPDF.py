@@ -3,13 +3,15 @@ import io
 from PIL import Image
 
 # open the file
-pdf_file = fitz.open("C:\\Users\\Schall\\Documents\\Bachelorarbeit\\python_modell_ba\\main\\src\\pdf_metadata.pdf")
+pdf_file = fitz.open("C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\testdokumentBachelor.pdf")
 
 # iterate over PDF pages
 for page_index in range(len(pdf_file)):
     # get the page itself
     page = pdf_file[page_index]
     image_list = page.get_images()
+    image_info = page.get_image_info(hashes=True, xrefs=True)
+    print(image_info)
     # printing number of images found in this page
     if image_list:
         print(f"[+] Found a total of {len(image_list)} images in page {page_index}")

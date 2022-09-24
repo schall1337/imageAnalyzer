@@ -1,27 +1,22 @@
 import cv2
-from pytesseract import pytesseract
-from pytesseract import Output
+import numpy as np
 
-pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+# Read input
+img = cv2.imread("C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\diagramm.jpg", cv2.IMREAD_GRAYSCALE)
+#img = cv2.imread("C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\lineChart.png", cv2.IMREAD_GRAYSCALE)
 
-img = cv2.imread("C:\\Users\\Schall\\Documents\\Bachelorarbeit\\python_modell_ba\\main\\resources\\diagramm.jpg")
+# Initialize output
+out = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
-image_data = pytesseract.image_to_data(img, output_type=Output.DICT)
+# Median blurring to get rid of the noise; invert image
+img = 255 - cv2.medianBlur(img, 3)
 
-print(image_data)
+# Detect and draw lines
+lines = cv2.HoughLinesP(img, 1, np.pi/180, 10, minLineLength=50, maxLineGap=30)
+for line in lines:
+    for x1, y1, x2, y2 in line:
+        cv2.line(out, (x1, y1), (x2, y2), (0, 0, 255), 1)
 
-
-print(image_data['left'])
-
-# Printing each word
-# for word in image_data['text']:
-# 	print(word)
-
-for i, word in enumerate(image_data['text']):
-	if word != '':
-		x,y,w,h = image_data['left'][i],image_data['top'][i],image_data['width'][i],image_data['height'][i]
-		cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),1)
-		#cv2.putText(img,word,(x,y-16),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,255),2)
-
-cv2.imshow("window", img)
+cv2.imshow('out', out)
 cv2.waitKey(0)
+cv2.destroyAllWindows()
