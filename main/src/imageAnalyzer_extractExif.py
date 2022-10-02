@@ -3,10 +3,9 @@ import os
 import json
 
 def extractExif(imageDetailList):
-    cwd = os.getcwd()
-    tmp = "\\main\\tmp\\"
+    tmp = "../../tmp/"
     for imageDetail in imageDetailList:
-        with open(cwd + tmp + imageDetail["fileName"], 'rb') as image_file:
+        with open(tmp + imageDetail["fileName"], 'rb') as image_file:
             image = Image(image_file)
             if image.has_exif:
                 exifData = {}

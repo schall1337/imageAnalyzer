@@ -1,6 +1,6 @@
 from pikepdf import Pdf, PdfImage
 
-filename = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\python_modell_ba\\main\\src\\pdf_metadata.pdf"
+filename = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\testdokumentBachelor.pdf"
 example = Pdf.open(filename)
 
 for i, page in enumerate(example.pages):

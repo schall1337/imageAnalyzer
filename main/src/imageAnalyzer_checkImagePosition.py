@@ -21,11 +21,11 @@ def calcPdfBorder(pathOfPdf):
                 "top_right": {"x" : r1.top_right.x, "y" : r1.top_right.y},
     }
     
-    shape = page.new_shape()
-    shape.draw_rect(r1)
-    shape.finish(width=0.3)
-    shape.commit()
-    doc.save("C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\coordTest2.pdf")
+    #shape = page.new_shape()
+    #shape.draw_rect(r1)
+    #shape.finish(width=0.3)
+    #shape.commit()
+    #doc.save("C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\coordTest2.pdf")
 
     return coordBorder
 

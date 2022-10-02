@@ -1,4 +1,4 @@
-imagePath = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\tmp\\"
+imagePath = "../../tmp"
 
 def reverseImageSearcher(imageDetailList):
     for imageDetail in imageDetailList:
@@ -11,7 +11,7 @@ def detect_web(path):
     from google.cloud import vision
     import io
     import os
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\key_api_google\\api_google_key.json"
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../../key_api_google/api_google_key.json"
     client = vision.ImageAnnotatorClient()
 
     reverseImageDetails = {

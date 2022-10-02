@@ -41,7 +41,7 @@ def getResultAsJsonArray(pdfimagesResult):
 
 
 def mapResultToJson(imageValueArray):
-    imageDetails = convertSizeToMegabyte(imageValueArray[14])
+    imageSize = convertSizeToMegabyte(imageValueArray[14])
     imageModell = {
         "page": imageValueArray[0],
         "num": imageValueArray[1],
@@ -57,12 +57,11 @@ def mapResultToJson(imageValueArray):
         "ID": imageValueArray[11],
         "x-ppi": imageValueArray[12],
         "y-ppi": imageValueArray[13],
-        "size": imageDetails,
+        "size": imageSize,
         "ratio": imageValueArray[15],
         "fileName": "",
         "reverseImageDetection": "",
         "coordinates": "",
-        "isTooCloseToBorder": False,
         "exif": ""
     }
     return imageModell

@@ -1,10 +1,10 @@
 import os, shutil
 
 def deleteTmpFiles():
-    cwd = os.getcwd()
-    tmp = "\\main\\tmp"
+    
+    
 
-    folder = cwd + tmp
+    folder = "../../tmp"
     for filename in os.listdir(folder):
         file_path = os.path.join(folder, filename)
         try:

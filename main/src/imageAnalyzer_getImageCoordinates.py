@@ -1,8 +1,5 @@
 import fitz
 
-#pathOfPdf = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\coordTest.pdf"
-
-
 def getImageCoordinates(imageDetailList, pathOfPdf):
     doc = fitz.open(pathOfPdf)
     for imageDetail in imageDetailList:

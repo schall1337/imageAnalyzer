@@ -1,24 +1,29 @@
-from pdfimages_extractImages import extractImages
-from pdfimages_getImagesDetails import getImageDetailList
-from pdfimages_mapImagePathToDetails import mapImagePathToDetails
-from pdfimages_reverseImageSearch import reverseImageSearcher
-from pdfimages_getImageCoordinates import getImageCoordinates
-from pdfimages_checkImagePosition import isImageInsideBorder
-from pdfimages_deleteTmpFiles import deleteTmpFiles
-from pdfimages_extractExif import extractExif
+from imageAnalyzer_getImagesDetails import getImageDetailList
+from imageAnalyzer_extractImage import extractImages
+from imageAnalyzer_reverseImageSearch import reverseImageSearcher
+from imageAnalyzer_getImageCoordinates import getImageCoordinates
+from imageAnalyzer_checkImagePosition import isImageInsideBorder
+from imageAnalyzer_extractExif import extractExif
+from imageAnalyzer_convertPdfPageToImg import convertPdfPageToImg
+from imageAnalyzer_deleteTmpFiles import deleteTmpFiles
+from imageAnalyzer_layoutParser import getImagesFromLayoutParser
 
 import json
 
-pathOfPdf = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\testdokumentBachelor.pdf"
+pathOfPdf = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\testdokumentBachelorCompressed.pdf"
 
-extractImages(pathOfPdf)
 imageDetailList = getImageDetailList(pathOfPdf)
-imageDetailList = mapImagePathToDetails(imageDetailList)
+extractImages(imageDetailList, pathOfPdf)
 #imageDetailList = reverseImageSearcher(imageDetailList)
 imageDetailList = getImageCoordinates(imageDetailList, pathOfPdf)
 imageDetailList = isImageInsideBorder(imageDetailList, pathOfPdf)
 imageDetailList = extractExif(imageDetailList)
+pdfPagesAsImageList = convertPdfPageToImg(pathOfPdf)
+pdfPagesAsImageList = getImagesFromLayoutParser(pdfPagesAsImageList)
 
-deleteTmpFiles()
 
-print(json.dumps(imageDetailList))
+
+#deleteTmpFiles()
+
+print(json.dumps(pdfPagesAsImageList))
+#print(json.dumps(imageDetailList))

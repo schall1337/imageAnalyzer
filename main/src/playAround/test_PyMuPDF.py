@@ -3,7 +3,7 @@ import io
 from PIL import Image
 
 # open the file
-pdf_file = fitz.open("C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\testdokumentBachelor.pdf")
+pdf_file = fitz.open("C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\testdokumentBachelorCompressed.pdf")
 
 # iterate over PDF pages
 for page_index in range(len(pdf_file)):
