@@ -11,31 +11,33 @@ def getImagesFromLayoutParser(pdfPagesAsImageList):
                                      label_map={0: "Text", 1: "Title", 2: "List", 3:"Table", 4:"Figure"}) """
 
     # efficient modell
-    model = lp.EfficientDetLayoutModel(
-        'lp://efficientdet/PubLayNet/tf_efficientdet_d0/config')
+    model = lp.EfficientDetLayoutModel('lp://efficientdet/PubLayNet/tf_efficientdet_d0/config')
 
     path = "../../tmp/"
-    for index_page, pdfImagePage in enumerate(pdfPagesAsImageList):
+    for index_page, pdfImagePage in enumerate(pdfPagesAsImageList, start = 1):
 
-        imagePil = Image.open(path + pdfImagePage["fileName"]).convert('RGB')
-        image = np.array(imagePil)
+        pdfPageAsImg = Image.open(path + pdfImagePage["fileName"]).convert('RGB')
+        image = np.array(pdfPageAsImg)
 
 
         layout = model.detect(image)
 
-        #lp.draw_box(image, layout, box_width=3)
+        imageLayout = lp.draw_box(image, layout, box_width=3)
+
+        imageLayout.save(path + "detectedLayoutPage_" + str(index_page) + ".png")
 
         figure_blocks = lp.Layout([b for b in layout if b.type == 'Figure'])
 
 
-        for index_block, block in enumerate(figure_blocks):
+        for index_block, block in enumerate(figure_blocks, start = 1):
             segment_image = (block
-                       .pad(left=15, right=15, top=15, bottom=5)
+                       .pad(left=20, right=20, top=20, bottom=10)
                        .crop_image(image))
-            path = "../../tmp/"
+                       
             fileName = "page_"+ str(index_page) +"_block_" + str(index_block) + ".png"
             block = {"fileName": fileName,
-                     "coordinates": block.points.tolist()
+                     "coordinates": block.points.tolist(),
+                     "textData" : []
                      }
             pdfImagePage["figures"].append(block)
 

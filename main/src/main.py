@@ -7,6 +7,7 @@ from imageAnalyzer_extractExif import extractExif
 from imageAnalyzer_convertPdfPageToImg import convertPdfPageToImg
 from imageAnalyzer_deleteTmpFiles import deleteTmpFiles
 from imageAnalyzer_layoutParser import getImagesFromLayoutParser
+from imageAnalyzer_tesseract import extractWordsFromImage
 
 import json
 
@@ -20,10 +21,11 @@ imageDetailList = isImageInsideBorder(imageDetailList, pathOfPdf)
 imageDetailList = extractExif(imageDetailList)
 pdfPagesAsImageList = convertPdfPageToImg(pathOfPdf)
 pdfPagesAsImageList = getImagesFromLayoutParser(pdfPagesAsImageList)
+extractWordsFromImage(pdfPagesAsImageList)
 
 
 
 #deleteTmpFiles()
 
 print(json.dumps(pdfPagesAsImageList))
-#print(json.dumps(imageDetailList))
+print(json.dumps(imageDetailList))

@@ -5,7 +5,7 @@ def convertPdfPageToImg(pdfFile):
     pdfPageImgList = []
     count = 0
     for page in doc:  # iterate through the pages
-        pix = page.get_pixmap(dpi = 300)  # render page to an image
+        pix = page.get_pixmap(dpi = 72)  # render page to an image
         count += 1
         
         fileName = "pdfImgPage-" + str(count) + ".png"
