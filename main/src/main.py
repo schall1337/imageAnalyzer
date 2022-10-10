@@ -8,24 +8,36 @@ from imageAnalyzer_convertPdfPageToImg import convertPdfPageToImg
 from imageAnalyzer_deleteTmpFiles import deleteTmpFiles
 from imageAnalyzer_layoutParser import getImagesFromLayoutParser
 from imageAnalyzer_tesseract import extractWordsFromImage
+from imageAnalyzer_calcBlockiness import calcBlockiness
+from imageAnalyer_annotationImageDetailList import generateAnnotationImageDetailList
+from imageAnalyzer_spellChecker import spellCheck 
 
 import json
 
-pathOfPdf = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\testdokumentBachelorCompressed.pdf"
+#pathOfPdf = "../resources/testdokumentBachelorCompressed.pdf"
+pathOfPdf = "../resources/TestLibre.pdf"
 
+# data retrieval
 imageDetailList = getImageDetailList(pathOfPdf)
 extractImages(imageDetailList, pathOfPdf)
-#imageDetailList = reverseImageSearcher(imageDetailList)
-imageDetailList = getImageCoordinates(imageDetailList, pathOfPdf)
-imageDetailList = isImageInsideBorder(imageDetailList, pathOfPdf)
-imageDetailList = extractExif(imageDetailList)
+getImageCoordinates(imageDetailList, pathOfPdf)
+extractExif(imageDetailList)
+
 pdfPagesAsImageList = convertPdfPageToImg(pathOfPdf)
-pdfPagesAsImageList = getImagesFromLayoutParser(pdfPagesAsImageList)
+getImagesFromLayoutParser(pdfPagesAsImageList)
 extractWordsFromImage(pdfPagesAsImageList)
 
+# data analysis
+#reverseImageSearcher(imageDetailList)
+isImageInsideBorder(imageDetailList, pathOfPdf)
+calcBlockiness(imageDetailList)
+spellCheck(pdfPagesAsImageList)
 
+# data output (annotation in pdf)
+generateAnnotationImageDetailList(pathOfPdf, imageDetailList)
 
-#deleteTmpFiles()
+deleteTmpFiles()
 
 print(json.dumps(pdfPagesAsImageList))
+print("\n")
 print(json.dumps(imageDetailList))

@@ -2,8 +2,6 @@ import layoutparser as lp
 from PIL import Image
 import numpy as np
 
-
-
 def getImagesFromLayoutParser(pdfPagesAsImageList):
     # precise modell
     """ model = lp.Detectron2LayoutModel('lp://PubLayNet/mask_rcnn_X_101_32x8d_FPN_3x/config', 
@@ -18,7 +16,7 @@ def getImagesFromLayoutParser(pdfPagesAsImageList):
 
         pdfPageAsImg = Image.open(path + pdfImagePage["fileName"]).convert('RGB')
         image = np.array(pdfPageAsImg)
-
+        pdfPageAsImg.close()
 
         layout = model.detect(image)
 
@@ -37,11 +35,16 @@ def getImagesFromLayoutParser(pdfPagesAsImageList):
             fileName = "page_"+ str(index_page) +"_block_" + str(index_block) + ".png"
             block = {"fileName": fileName,
                      "coordinates": block.points.tolist(),
-                     "textData" : []
+                     "textData" : [],
+                     "imageAnalysis": {
+                        "spellingErrors": [],
+                        "smallestCharacter": ""
+                     }
                      }
             pdfImagePage["figures"].append(block)
 
             im = Image.fromarray(segment_image)
             im.save(path + fileName)
+            im.close()
             
     return pdfPagesAsImageList

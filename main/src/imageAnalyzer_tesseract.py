@@ -13,7 +13,6 @@ def extractWordsFromImage(pdfPagesAsImageList):
             for figure in pdfPage["figures"]:
                 figureImg = cv2.imread(path + figure["fileName"])
                 figure_data = pytesseract.image_to_data(figureImg, output_type=Output.DICT, config = custom_psm_config, lang='deu')
-                #filtered_list = filter(lambda x: len(x) > 3, figure_data['text'])
                 for i, word in enumerate(figure_data["text"]):
                     if len(word) > 2:
                         textData = {

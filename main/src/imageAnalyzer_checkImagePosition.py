@@ -26,7 +26,7 @@ def calcPdfBorder(pathOfPdf):
     #shape.finish(width=0.3)
     #shape.commit()
     #doc.save("C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\coordTest2.pdf")
-
+    doc.close()
     return coordBorder
 
 def isImageInsideBorder(imageDetailList, pathOfPdf):
@@ -39,11 +39,11 @@ def isImageInsideBorder(imageDetailList, pathOfPdf):
         imagePointTopLeft = imageDetail["coordinates"]["top_left"]
         imagePointBottomRight = imageDetail["coordinates"]["bottom_right"]
         if not (borderPointTopLeft["x"] < imagePointTopLeft["x"] < borderPointBottomRight["x"] and borderPointTopLeft["y"] < imagePointTopLeft["y"] < borderPointBottomRight["y"]):
-            imageDetail["isTooCloseToBorder"] = True
+            imageDetail["imageAnalysis"]["isTooCloseToBorder"] = True
             continue
 
         if not (borderPointTopLeft["x"] < imagePointBottomRight["x"] < borderPointBottomRight["x"] and borderPointTopLeft["y"] < imagePointBottomRight["y"] < borderPointBottomRight["y"]):
-            imageDetail["isTooCloseToBorder"] = True
+            imageDetail["imageAnalysis"]["isTooCloseToBorder"] = True
 
     return imageDetailList
 

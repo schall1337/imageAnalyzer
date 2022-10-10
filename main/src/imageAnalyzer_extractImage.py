@@ -1,6 +1,4 @@
 import fitz # PyMuPDF
-import io
-from PIL import Image
 
 def extractImages(imageDetailList, pdfFile):
     pdf_file = fitz.open(pdfFile)
@@ -10,11 +8,14 @@ def extractImages(imageDetailList, pdfFile):
         image_bytes = base_image["image"]
         # get the image extension
         image_ext = base_image["ext"]
-        imagePIL = Image.open(io.BytesIO(image_bytes))
+        image["imageExt"] = image_ext
         imageName = f"MuPDF_image{image_index}.{image_ext}"
         image["fileName"] = imageName
-        #imagePIL.save("../../tmp/" + open(imageName, "wb"))
-        imagePIL.save("../../tmp/" + imageName)
+        out = open("../../tmp/" + imageName, "wb")
+        out.write(image_bytes)
+        out.close()
+    
+    pdf_file.close()
 
     return imageDetailList
 

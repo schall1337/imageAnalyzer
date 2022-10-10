@@ -14,4 +14,5 @@ def getImageCoordinates(imageDetailList, pathOfPdf):
             "height": rect.height
         }
         imageDetail["coordinates"] = coord
+    doc.close()
     return imageDetailList

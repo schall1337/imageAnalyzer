@@ -1,9 +1,10 @@
-imagePath = "../../tmp"
+imagePath = "../../tmp/"
 
 def reverseImageSearcher(imageDetailList):
+
     for imageDetail in imageDetailList:
         reverseImageDetails = detect_web(imagePath + imageDetail["fileName"])
-        imageDetail["reverseImageDetection"] = reverseImageDetails
+        imageDetail["imageAnalysis"]["reverseImageDetection"] = reverseImageDetails
     return imageDetailList
 
 def detect_web(path):
@@ -29,8 +30,6 @@ def detect_web(path):
 
     if annotations.pages_with_matching_images:
 
-        print('\n{} Pages with matching images found:'.format(
-            len(annotations.pages_with_matching_images)))
         reverseImageDetails["countPagesWithMatchingImages"] = len(annotations.pages_with_matching_images)
 
         for page in annotations.pages_with_matching_images:
@@ -39,22 +38,15 @@ def detect_web(path):
                 "fullMatchingImages": [],
                 "partiallyMatchingImages": []
             }
-            print('\n\tPage url   : {}'.format(page.url))
             detailEntity["pageUrl"] = page.url
             if page.full_matching_images:
-                print('\t{} Full Matches found: '.format(
-                       len(page.full_matching_images)))
 
                 for image in page.full_matching_images:
-                    print('\t\tImage url  : {}'.format(image.url))
                     detailEntity["fullMatchingImages"].append(image.url)
 
             if page.partial_matching_images:
-                print('\t{} Partial Matches found: '.format(
-                       len(page.partial_matching_images)))
 
                 for image in page.partial_matching_images:
-                    print('\t\tImage url  : {}'.format(image.url))
                     detailEntity["partiallyMatchingImages"].append(image.url)
             reverseImageDetails["pagesWithMatchingImages"].append(detailEntity)
 

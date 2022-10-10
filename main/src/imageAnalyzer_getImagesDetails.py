@@ -4,6 +4,7 @@ import re
 #pathOfPdf = "C:\\Users\\Schall\\Documents\\Bachelorarbeit\\python_modell_ba\\main\\resources\\same_pic_diff_sizes.pdf"
 SCRIPT_NAME = "pdfimages_getImagesDetails"
 
+
 def getImageDetailList(pathOfPdf):
     subprocessResult = runPdfimagesSubprocess(pathOfPdf)
     if validatePdfimagesResult(subprocessResult):
@@ -35,8 +36,9 @@ def getResultAsJsonArray(pdfimagesResult):
     if len(lines) > 1:
         for line in lines[2:]:
             imageValueArray = line.split()
-            imageResultsAsJsonArray.append(
-                mapResultToJson(imageValueArray))
+            if imageValueArray[2] == "image":
+                imageResultsAsJsonArray.append(
+                    mapResultToJson(imageValueArray))
     return imageResultsAsJsonArray
 
 
@@ -59,35 +61,42 @@ def mapResultToJson(imageValueArray):
         "y-ppi": imageValueArray[13],
         "size": imageSize,
         "ratio": imageValueArray[15],
+        "imageExt": "",
         "fileName": "",
-        "reverseImageDetection": "",
         "coordinates": "",
-        "exif": ""
+        "exif": "",
+        "imageAnalysis": {
+            "reverseImageDetection": "",
+            "qualityScore": "",
+            "isTooCloseToBorder": False
+        }
+
     }
     return imageModell
 
-#helper class
+# helper class
+
+
 def convertSizeToMegabyte(imageSize):
-    #example "80.4K"
-    #get unit from string
+    # example "80.4K"
+    # get unit from string
     unit = "".join(re.split("[^a-zA-Z]*", imageSize))
-    #get float from string
+    # get float from string
     value = float(re.findall(r"[-+]?(?:\d*\.\d+|\d+)", imageSize)[0])
-    
+
     details = {
-        "unit": "megabytes",
+        "unit": "KB",
         "size": ""
     }
 
     match unit:
         case 'B':
-            details["size"] =  value / 1000000
-        case 'K':
             details["size"] = value / 1000
-        case 'M':
+        case 'K':
             details["size"] = value
-        case 'G':
+        case 'M':
             details["size"] = value * 1000
+        case 'G':
+            details["size"] = value * 1000000
 
     return details
-
