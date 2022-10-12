@@ -1,7 +1,86 @@
 import fitz
 
-def generateAnnotationImageDetailList(pathOfPdf, imageDetailList):
+def generateAnnotation(pathOfPdf, imageDetailList, pdfPagesAsImageList):
     doc = fitz.open(pathOfPdf)
+    generateAnnotationImageDetailList(imageDetailList, doc)
+    generateAnnotationPdfPagesAsImageList(pdfPagesAsImageList, doc)
+
+    doc.save("testAnnotation.pdf", deflate=False)
+    doc.close()
+
+###PagesAsImageList
+def generateAnnotationPdfPagesAsImageList(pdfPagesAsImageList, doc):
+    MIN_CHAR_HEIGHT = 8
+    for pdfImgPage in pdfPagesAsImageList:
+        if pdfImgPage["figures"]:
+            x_offset = 0
+            y_offset = 30
+            scalingFactor = pdfImgPage["pixMap"]["width"] / pdfImgPage["mediaBox"]["width"]
+            docPage = doc[pdfImgPage["page"]-1]
+            for figure in pdfImgPage["figures"]:
+                outputTextList = []
+                #coord
+                topLeftX = figure["coordinates"][0][0] / scalingFactor
+                topLeftY = figure["coordinates"][0][1] / scalingFactor
+                bottomRightX = figure["coordinates"][2][0] / scalingFactor
+                bottomRightY = figure["coordinates"][2][1] / scalingFactor
+                
+                ##outputText
+                if figure["imageAnalysis"]["spellingErrors"]:
+                    outputTextList.append(getspellingErrors(figure))
+                
+                if figure["imageAnalysis"]["minWordHeight"] <= MIN_CHAR_HEIGHT:
+                    outputTextList.append(getSmallCharacterInformation(figure, MIN_CHAR_HEIGHT))
+
+                if figure["imageAnalysis"]["isTooCloseToBorder"]:
+                    outputTextList.append(getTooCloseToBorderInfo())
+                
+                if figure["imageAnalysis"]["color"]["background"]:
+                    outputTextList.append(getColorAnalysis(figure["imageAnalysis"]["color"]))
+
+                for output in outputTextList:
+                    rect = fitz.Rect(topLeftX + x_offset, topLeftY + y_offset, bottomRightX, bottomRightY)
+                    docPage.add_text_annot(rect.tl, output)
+                    x_offset += 30
+
+def getColorAnalysis(colorData):
+    farbtonHintergrund = colorData["background"][0]["farbton"]
+    anteilHintergrund = colorData["background"][0]["anteil"]
+    outputColorText = "Hinweise zur Farbwahl\n\n"
+    outputColorText += "- Es wurde ein Hintergrund mit dem Farbton '{farbton}' erkannt ({anteil}% Anteil)\n\n".format(farbton = farbtonHintergrund, anteil =anteilHintergrund)
+    for indistinctColor in colorData["indistinctColors"]:
+        farbton = indistinctColor["farbton"]
+        anteil = indistinctColor["anteil"]
+        outputColorText += "- Es wurde der Farbton '{farbton}' im Bild erkannt ({anteil}% Anteil)\n".format(farbton=farbton, anteil=anteil)
+    outputColorText += "\nDiese Farben haben einen niedrigen Kontrast zu einander und können nur schwer gelesen werden."
+    return outputColorText
+
+
+def getTooCloseToBorderInfo():
+    outputTooCloseToBorder = "Hinweis zur Position\n\nEs wurde festgestellt, dass die Position des Bildes zu nah am Rand ist."
+    return outputTooCloseToBorder
+
+
+def getSmallCharacterInformation(figure, MIN_CHAR_HEIGHT):
+    outputSmallCharacterInfo = "Hinweis zur Schriftgröße\n\nEs wurden Wörter mit sehr kleiner Schriftgröße erkannt.\n\n"
+    
+    for word in figure["textData"]:
+        if word["height"] <= MIN_CHAR_HEIGHT:
+            outputSmallCharacterInfo += "- '" + word["text"]+"'\n"
+    return outputSmallCharacterInfo
+
+def getspellingErrors(figure):
+    outputSpellingError = "Rechtschreibfehler bzw. unbekannte Wörter\n"
+
+    for spellingError in figure["imageAnalysis"]["spellingErrors"]:
+        outputSpellingError+="- '" + spellingError+"'\n"
+    
+    outputSpellingError+= "\nHinweis: Wörter können aufgrund von schlechter Bildqualität oder zu kleiner Schrift falsch erkannt werden."
+    return outputSpellingError
+
+###imageDetailList Annotation
+def generateAnnotationImageDetailList(imageDetailList, doc):
+
     for imageDetail in imageDetailList:
         outputTextList = []
         # coord
@@ -10,28 +89,27 @@ def generateAnnotationImageDetailList(pathOfPdf, imageDetailList):
         bottomRightX = imageDetail["coordinates"]["bottom_right"]["x"]
         bottomRightY = imageDetail["coordinates"]["bottom_right"]["y"]
         # page
-        page = doc[int(imageDetail["page"])-1]
-        page.set_rotation(0)
+        docPage = doc[int(imageDetail["page"])-1]
+        docPage.set_rotation(0)
 
         # annotation offset
-        offset = 0
+        x_offset = 0
 
         # outputText
         outputTextList.append(getGeneralInformation(imageDetail))
         outputTextList.append(getBlockinessInformation(imageDetail))
-        if(imageDetail["exif"]):
+        if imageDetail["exif"]:
             outputTextList.append(getExifData(imageDetail["exif"]))
         
-        if(imageDetail["imageAnalysis"]["reverseImageDetection"]["countPagesWithMatchingImages"]):
+        if imageDetail["imageAnalysis"]["reverseImageDetection"] and imageDetail["imageAnalysis"]["reverseImageDetection"]["countPagesWithMatchingImages"]:
             outputTextList.append(getReverseImageSearchResults(imageDetail["imageAnalysis"]["reverseImageDetection"]))
 
         for output in outputTextList:
-            rect = fitz.Rect(topLeftX + offset, topLeftY, bottomRightX, bottomRightY)
-            page.add_text_annot(rect.tl, output)
-            offset += 30
+            rect = fitz.Rect(topLeftX + x_offset, topLeftY, bottomRightX, bottomRightY)
+            docPage.add_text_annot(rect.tl, output)
+            x_offset += 30
 
-    doc.save("testAnnotation.pdf", deflate=False)
-    doc.close()
+
 
 def getReverseImageSearchResults(reverseSearchDetails):
     outputReverse = """Ergebnisse der Bildsuche

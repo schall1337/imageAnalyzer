@@ -9,8 +9,9 @@ from imageAnalyzer_deleteTmpFiles import deleteTmpFiles
 from imageAnalyzer_layoutParser import getImagesFromLayoutParser
 from imageAnalyzer_tesseract import extractWordsFromImage
 from imageAnalyzer_calcBlockiness import calcBlockiness
-from imageAnalyer_annotationImageDetailList import generateAnnotationImageDetailList
-from imageAnalyzer_spellChecker import spellCheck 
+from imageAnalyer_annotation import generateAnnotation
+from imageAnalyzer_wordAnalysis import wordAnalysis
+from imageAnalzyer_colorCheck import colorCheck
 
 import json
 
@@ -31,13 +32,14 @@ extractWordsFromImage(pdfPagesAsImageList)
 #reverseImageSearcher(imageDetailList)
 isImageInsideBorder(imageDetailList, pathOfPdf)
 calcBlockiness(imageDetailList)
-spellCheck(pdfPagesAsImageList)
+wordAnalysis(pdfPagesAsImageList)
+colorCheck(pdfPagesAsImageList)
 
 # data output (annotation in pdf)
-generateAnnotationImageDetailList(pathOfPdf, imageDetailList)
+generateAnnotation(pathOfPdf, imageDetailList, pdfPagesAsImageList)
 
 deleteTmpFiles()
 
 print(json.dumps(pdfPagesAsImageList))
 print("\n")
-print(json.dumps(imageDetailList))
+#print(json.dumps(imageDetailList))

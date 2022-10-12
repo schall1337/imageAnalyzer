@@ -10,9 +10,9 @@ def calcPdfBorder(pathOfPdf):
     pageHeight = rectPage.height
 
     
-    tenPercentOfWidth = pageWidth * 0.15
-    tenPercentOfHeight = pageHeight * 0.1
-    r1 = fitz.Rect(0 + tenPercentOfWidth , 0 + tenPercentOfWidth,pageWidth - tenPercentOfWidth,pageHeight-tenPercentOfHeight)
+    percentageOfWidth = pageWidth * 0.15
+    percentageOfHeight = pageHeight * 0.1
+    r1 = fitz.Rect(0 + percentageOfWidth , 0 + percentageOfWidth,pageWidth - percentageOfWidth,pageHeight-percentageOfHeight)
 
     coordBorder  = {
                 "bottom_left": {"x" : r1.bottom_left.x, "y" : r1.bottom_left.y},

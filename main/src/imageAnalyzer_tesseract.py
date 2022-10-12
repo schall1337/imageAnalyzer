@@ -20,7 +20,7 @@ def extractWordsFromImage(pdfPagesAsImageList):
                             "height" : figure_data['height'][i]
                         }
                         figure["textData"].append(textData)
-                        x,y,w,h = figure_data['left'][i],figure_data['top'][i],figure_data['width'][i],figure_data['height'][i]
-                        cv2.rectangle(figureImg,(x,y),(x+w,y+h),(0,255,0),1)
+                        #x,y,w,h = figure_data['left'][i],figure_data['top'][i],figure_data['width'][i],figure_data['height'][i]
+                        #cv2.rectangle(figureImg,(x,y),(x+w,y+h),(0,255,0),1)
                 cv2.imwrite(path + "ocrImage_" + str(count) + ".png", figureImg)
                 count += 1
