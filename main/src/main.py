@@ -8,10 +8,11 @@ from imageAnalyzer_convertPdfPageToImg import convertPdfPageToImg
 from imageAnalyzer_deleteTmpFiles import deleteTmpFiles
 from imageAnalyzer_layoutParser import getImagesFromLayoutParser
 from imageAnalyzer_tesseract import extractWordsFromImage
-from imageAnalyzer_calcBlockiness import calcBlockiness
+from imageAnalyzer_calcQualityMetrics import calcQualityMetrics
 from imageAnalyer_annotation import generateAnnotation
 from imageAnalyzer_wordAnalysis import wordAnalysis
 from imageAnalzyer_colorCheck import colorCheck
+from imageAnalyzer_reportBuilder import createReport
 
 import json
 
@@ -29,17 +30,20 @@ getImagesFromLayoutParser(pdfPagesAsImageList)
 extractWordsFromImage(pdfPagesAsImageList)
 
 # data analysis
-#reverseImageSearcher(imageDetailList)
+reverseImageSearcher(imageDetailList)
 isImageInsideBorder(imageDetailList, pathOfPdf)
-calcBlockiness(imageDetailList)
+calcQualityMetrics(imageDetailList)
+
 wordAnalysis(pdfPagesAsImageList)
 colorCheck(pdfPagesAsImageList)
 
 # data output (annotation in pdf)
 generateAnnotation(pathOfPdf, imageDetailList, pdfPagesAsImageList)
+createReport(imageDetailList, pdfPagesAsImageList)
 
 deleteTmpFiles()
 
-print(json.dumps(pdfPagesAsImageList))
+#print(json.dumps(pdfPagesAsImageList))
 print("\n")
 #print(json.dumps(imageDetailList))
+print("End")

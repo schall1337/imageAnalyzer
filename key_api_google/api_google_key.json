@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "vibrant-castle-341419",
+  "private_key_id": "7409eb327a977572b24a2c7e11dc2f1694ff088a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCwnUBpVFZXI+Hr\ncoJ7To69/nl6F2FL7jBJlpOUX9dR4F7J94bh29WKzgN1yxMiSBgE/aCOPbT3dOTS\nPuzbIla3ce94myC2xrrB1K78Xvnv3JcclJpFof5W1yutwTJ1r3dJ/4Dj8IdWMW5z\nFmtbcWKxD/XdQZCccbYg4pClc7LT10DxC/HygqqTCCjgUd5q3vI5tLKMGlupAMVD\nTSjUlAYBUvPHEf0MGLShuisgPJoJF97gxRjWrFEYh4s0lYZBJcYmrmwwVVQ+gnQc\nhDMWtmaJZe8Yjen3nj4K1kRc9a+YeVNo57BCIMtHaCJitb65g2M5ymeUsgjmEctd\nSKPMvgrvAgMBAAECggEAE6JqdUCU2AYws7dcwy7ra+WHsBI7qlsrZMWdLYsZdHbw\nWB1bvO3ux7TPKgAZZfUZhSsvIhvBFnDujrhue47N5iyqoJVaZdzNCVxxgbQLWZED\n/v+URmEpKz1WPpsHrDwFaSVtuP7WBOKPnV16MkXLi39d6CrwU+bJBnnkS8iDh80A\ndtTEYGTL+XlCXgflB3q5nel/n3js1lL4aD+WnQlxcAJkv7OYRT6mhE8Ef7Z9vdqM\n2S0ZMzdnE5snNoltEnPWM6fNnAqE4KNL1BoZ9l5xOokJD4uzPefR/zBOfjOBFav0\nR3k59A4n4Viwe7mR0OE8jcKoLUcqyWnCoGnjusD/qQKBgQDlg9h6H1wISsizR0mX\nPuvx4ELpPr4F1f8Mt2HIQYywWmd6rLOf8WLRdHnLH7E48ga16DIcBHSNy5Hogxcn\nL/tqutzzAthf/IH+iKA3RFenpJYw3cemd5VwotPaGKQM0aJAaMSEi0nnx3/08BL7\nk8hZymrcoUdOY0RkWzOsurHtuQKBgQDE/qcl9mANSA7h9HjiE38y/n03W25ldoij\nOn2G+u0DIpzbfPw12cBcVFh9y7j//s5+KGQmHP8tO0cWtT4VwLYmGf2YgGx41y+g\nJ7yI3gbxCN058WfgXrd+YLI6EJ8IK0zmpJyrjJPuoEzunV2xoK8Ivn/daD75qpNO\n7vMMHkFR5wKBgQDVSVQYESJulkiyyhGqWw/axASKSwM92yNcxuI4vimnDSxSxUFb\n5m9lpG82g2onOEtiKri+bql9x+r8/y25/g4Pnj2MG13GvZp0VrVFBt7KbNoh6UgK\n++BFPxvO9s0lGH9GidXuMp7opO3VSnDpl+k9AC2UgNAKGZfKBzMbVpfZCQKBgA49\nHdXHnh+3oqPAaPBmWl5UOLbEnBEnZS7vLl2QS4tbeB0BRrWZvKavzgmhrQiL4V8L\nCloa5HLfgv7oMMmfuUq9vC/GsJB3dVDNLnpyGexYKK1kfo6gKgEvehJqWyRbBN7y\n7QQVUCgCXC0vILOTGrO2GUXmoA6pvqYI7XZlxXDnAoGBAI7Pv/hgCA7NRB1m1pKV\n7KysFxwWjI+mTiEDOvDIQIrwiAQN4rpZNMrJALYonMfB3CCxnABG/H7u61j+wQWc\nUUWRbe+DvDuoOsCy4yGCbK3kKUbKUqtZU7yltv+/zdryLcC5JofWVggtFeEc6tkH\n6i0Z2e1cchytESaFUO+TFGlg\n-----END PRIVATE KEY-----\n",
+  "client_email": "schallbachelorthesis2022@vibrant-castle-341419.iam.gserviceaccount.com",
+  "client_id": "117615322120908096595",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/schallbachelorthesis2022%40vibrant-castle-341419.iam.gserviceaccount.com"
+}

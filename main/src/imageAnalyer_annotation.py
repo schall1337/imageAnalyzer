@@ -5,7 +5,7 @@ def generateAnnotation(pathOfPdf, imageDetailList, pdfPagesAsImageList):
     generateAnnotationImageDetailList(imageDetailList, doc)
     generateAnnotationPdfPagesAsImageList(pdfPagesAsImageList, doc)
 
-    doc.save("testAnnotation.pdf", deflate=False)
+    doc.save("../../tmp/annotation.pdf", deflate=False)
     doc.close()
 
 ###PagesAsImageList
@@ -51,8 +51,11 @@ def getColorAnalysis(colorData):
     for indistinctColor in colorData["indistinctColors"]:
         farbton = indistinctColor["farbton"]
         anteil = indistinctColor["anteil"]
+        contrast = indistinctColor["wcgaContrast"]
         outputColorText += "- Es wurde der Farbton '{farbton}' im Bild erkannt ({anteil}% Anteil)\n".format(farbton=farbton, anteil=anteil)
-    outputColorText += "\nDiese Farben haben einen niedrigen Kontrast zu einander und können nur schwer gelesen werden."
+        outputColorText += "- Der Kontrast der beiden Farben entspricht nach der WCAG Richtlinie einem Wert von '{contrast}', es sollte mindestens einen Wert von '3' haben\n".format(contrast=contrast)
+        outputColorText += "- Weitere Informationen unter 'https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html'\n\n"
+    outputColorText += "\nHinweis:\nDiese Farben haben einen niedrigen Kontrast zu einander und können nur schwer gelesen werden."
     return outputColorText
 
 
@@ -66,7 +69,12 @@ def getSmallCharacterInformation(figure, MIN_CHAR_HEIGHT):
     
     for word in figure["textData"]:
         if word["height"] <= MIN_CHAR_HEIGHT:
-            outputSmallCharacterInfo += "- '" + word["text"]+"'\n"
+            #ocr wurde bei 144dpi durchgeführt, standard anzeige ist 72dpi, deswegen durch 2 teilen
+            #1px = 0.75pt
+            outputSmallCharacterInfo += "- '" + word["text"] + ", Höhe: ~" + str(word["height"]/2) + "px ~" + str(word["height"]/2*0.75) + "pt\n"
+    
+    outputSmallCharacterInfo += "\nDie angegebenen Werte sind für 72 DPI berechnet"
+    outputSmallCharacterInfo += "\nEs empfiehlt sich eine Größe von min. 8pt"
     return outputSmallCharacterInfo
 
 def getspellingErrors(figure):
@@ -98,6 +106,7 @@ def generateAnnotationImageDetailList(imageDetailList, doc):
         # outputText
         outputTextList.append(getGeneralInformation(imageDetail))
         outputTextList.append(getBlockinessInformation(imageDetail))
+        outputTextList.append(getPiqeInformation(imageDetail))
         if imageDetail["exif"]:
             outputTextList.append(getExifData(imageDetail["exif"]))
         
@@ -109,7 +118,25 @@ def generateAnnotationImageDetailList(imageDetailList, doc):
             docPage.add_text_annot(rect.tl, output)
             x_offset += 30
 
+def getPiqeInformation(imageDetail):
+    piqeScore = int(imageDetail["imageAnalysis"]["piqeScore"])
+    output = """
+    PIQE Score (Perception-based Image QUality Evaluator)
 
+    Der PIQE Score gibt die Verzerrung eines Bildes aufgrund von Blockartefakte
+    und Gaußsches Rauschen an.
+    Je höher der Score, desto schlechter ist die Qualität des Bildes.
+    Werte unter 50 werden als gut wahrgenommen.
+
+    Schärfescore: {piqeScore}
+
+    Weitere Informationen unter
+    https://de.mathworks.com/help/images/ref/piqe.html
+    oder
+    https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7084843
+    """.format(piqeScore=piqeScore)
+
+    return output
 
 def getReverseImageSearchResults(reverseSearchDetails):
     outputReverse = """Ergebnisse der Bildsuche
@@ -144,7 +171,7 @@ def getExifData(imageDetailExif):
     return outputExif
 
 def getBlockinessInformation(imageDetail):
-    blockinessScore = int(imageDetail["imageAnalysis"]["qualityScore"])
+    blockinessScore = int(imageDetail["imageAnalysis"]["blockinessScore"])
     outputBlockiness = """
     Kompressionsinformation
 

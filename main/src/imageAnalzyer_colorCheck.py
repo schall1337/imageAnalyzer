@@ -1,4 +1,5 @@
 from haishoku.haishoku import Haishoku
+import wcag_contrast_ratio as contrast
 import colorsys
 
 
@@ -19,11 +20,12 @@ def colorCheck(pdfPagesAsImageList):
             if isBetweenTreshold(dominantColor, hsv_white_lower_threshold, hsv_white_upper_threshold):
                 for color in palette:
                     anteil = color[0]
-                    rgb = color[1]
-                    if anteil > 0 and isBetweenTreshold(color[1], hsv_yellow_lower_threshold, hsv_yellow_upper_threshold):
+                    rgbYellow = color[1]
+                    if anteil > 0 and isBetweenTreshold(rgbYellow, hsv_yellow_lower_threshold, hsv_yellow_upper_threshold):
                         indistinctColor = {"anteil": anteil*100,
                                            "farbton": "Gelb",
-                                           "rgb": rgb
+                                           "rgb": rgbYellow,
+                                           "wcgaContrast": round(contrast.rgb(tuple(elem / 255 for elem in dominantColor), tuple(elem / 255 for elem in rgbYellow)),2)
                                            }
                         figure["imageAnalysis"]["color"]["indistinctColors"].append(
                             indistinctColor)

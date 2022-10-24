@@ -67,7 +67,8 @@ def mapResultToJson(imageValueArray):
         "exif": "",
         "imageAnalysis": {
             "reverseImageDetection": "",
-            "qualityScore": "",
+            "blockinessScore": "",
+            "piqeScore": "",
             "isTooCloseToBorder": False
         }
 
