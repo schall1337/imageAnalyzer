@@ -46,7 +46,6 @@ def mapResultToJson(imageValueArray):
     imageSize = convertSizeToMegabyte(imageValueArray[14])
     imageModell = {
         "page": imageValueArray[0],
-        "num": imageValueArray[1],
         "type": imageValueArray[2],
         "width": imageValueArray[3],
         "height": imageValueArray[4],
@@ -54,13 +53,10 @@ def mapResultToJson(imageValueArray):
         "comp": imageValueArray[6],
         "bpc": imageValueArray[7],
         "enc": imageValueArray[8],
-        "interp": imageValueArray[9],
         "object": imageValueArray[10],
-        "ID": imageValueArray[11],
         "x-ppi": imageValueArray[12],
         "y-ppi": imageValueArray[13],
         "size": imageSize,
-        "ratio": imageValueArray[15],
         "imageExt": "",
         "fileName": "",
         "coordinates": "",
@@ -71,7 +67,6 @@ def mapResultToJson(imageValueArray):
             "piqeScore": "",
             "isTooCloseToBorder": False
         }
-
     }
     return imageModell
 

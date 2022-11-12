@@ -43,7 +43,7 @@ createReport(imageDetailList, pdfPagesAsImageList)
 
 deleteTmpFiles()
 
-#print(json.dumps(pdfPagesAsImageList))
+print(json.dumps(pdfPagesAsImageList))
 print("\n")
 #print(json.dumps(imageDetailList))
 print("End")
