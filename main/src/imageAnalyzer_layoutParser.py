@@ -24,16 +24,19 @@ def getImagesFromLayoutParser(pdfPagesAsImageList):
         #percentageOfWidth = pageWidth * 0.15
         #percentageOfHeight = pageHeight * 0.1
 
-        #1cm = 56px at 144 dpi
+        # 1cm = 56px at 144 dpi
         cm_to_pixel = 56
 
         x_top_left = float(config['default']['border_left']) * cm_to_pixel
         y_top_left = float(config['default']['border_top']) * cm_to_pixel
 
-        x_bottom_right = pageWidth - (float(config['default']['border_right']) * cm_to_pixel)
-        y_bottom_right = pageHeight - (float(config['default']['border_bottom']) * cm_to_pixel)
+        x_bottom_right = pageWidth - \
+            (float(config['default']['border_right']) * cm_to_pixel)
+        y_bottom_right = pageHeight - \
+            (float(config['default']['border_bottom']) * cm_to_pixel)
 
-        borderBox = lp.elements.Rectangle(x_top_left , y_top_left,x_bottom_right,y_bottom_right)
+        borderBox = lp.elements.Rectangle(
+            x_top_left, y_top_left, x_bottom_right, y_bottom_right)
 
         pdfPageAsImg = Image.open(
             path + pdfImagePage["fileName"]).convert('RGB')
@@ -66,6 +69,10 @@ def getImagesFromLayoutParser(pdfPagesAsImageList):
                              "color": {
                                  "background": [],
                                  "indistinctColors": []
+                             },
+                             "color_primitive": {
+                                "background": "",
+                                "indistinctColors": []
                              }
                          }
                          }

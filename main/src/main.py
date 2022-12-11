@@ -9,10 +9,12 @@ from imageAnalyzer_deleteTmpFiles import deleteTmpFiles
 from imageAnalyzer_layoutParser import getImagesFromLayoutParser
 from imageAnalyzer_tesseract import extractWordsFromImage
 from imageAnalyzer_calcQualityMetrics import calcQualityMetrics
-from imageAnalyer_annotation import generateAnnotation
+from imageAnalyzer_annotation import generateAnnotation
 from imageAnalyzer_wordAnalysis import wordAnalysis
 from imageAnalzyer_colorCheck import colorCheck
 from imageAnalyzer_reportBuilder import createReport
+from imageAnalyzer_colorCheckPrimitive import colorCheckPrimitive
+
 
 import json
 import configparser
@@ -39,15 +41,16 @@ calcQualityMetrics(imageDetailList)
 
 wordAnalysis(pdfPagesAsImageList)
 colorCheck(pdfPagesAsImageList)
+colorCheckPrimitive(pdfPagesAsImageList)
 
 # data output (annotation in pdf)
 generateAnnotation(pathOfPdf, imageDetailList, pdfPagesAsImageList)
 createReport(imageDetailList, pdfPagesAsImageList)
 
-if int(config['default']['debug_mode']) == 1:
+if int(config['default']['debug_mode']) == 0:
     deleteTmpFiles()
 
-#print(json.dumps(pdfPagesAsImageList))
-print(json.dumps(imageDetailList))
+print(json.dumps(pdfPagesAsImageList))
+#print(json.dumps(imageDetailList))
 print("\n")
 print("End")
