@@ -7,7 +7,7 @@ def calcQualityMetrics(imageDetailList):
         fileName = "../../tmp/" + imageDetail["fileName"]
 
         blockinessScore = eng.jpeg_quality_score(fileName)
-        imageDetail["imageAnalysis"]["blockinessScore"] = blockinessScore
+        imageDetail["imageAnalysis"]["jpegQualityScore"] = blockinessScore
 
         piqeScore = eng.piqe_score(fileName)
         imageDetail["imageAnalysis"]["piqeScore"] = piqeScore

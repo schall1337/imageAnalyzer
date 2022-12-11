@@ -31,8 +31,7 @@ def validatePdfimagesResult(subprocessResult):
 def getResultAsJsonArray(pdfimagesResult):
     imageResultsAsJsonArray = []
     lines = pdfimagesResult.splitlines()
-    # skip header (line 0) and separator (line 1) to start dire with result
-    # TODO check if line exists
+    # skip header (line 0) and separator (line 1) to start directly with result
     if len(lines) > 1:
         for line in lines[2:]:
             imageValueArray = line.split()
@@ -63,7 +62,7 @@ def mapResultToJson(imageValueArray):
         "exif": "",
         "imageAnalysis": {
             "reverseImageDetection": "",
-            "blockinessScore": "",
+            "jpegQualityScore": "",
             "piqeScore": "",
             "isTooCloseToBorder": False
         }

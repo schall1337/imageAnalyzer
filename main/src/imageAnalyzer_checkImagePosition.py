@@ -1,18 +1,26 @@
 import fitz
-
+import configparser
 
 def calcPdfBorder(pathOfPdf):
+    config = configparser.ConfigParser()
+    config.read('config-file.ini')
     doc = fitz.open(pathOfPdf)
-    page = doc.load_page(0)
+    page = doc.load_page(2)
     rectPage = page.mediabox
 
     pageWidth = rectPage.width
     pageHeight = rectPage.height
 
+    #1cm = 28px at 72 dpi
+    cm_to_pixel = 28
+
+    x_top_left = float(config['default']['border_left']) * cm_to_pixel
+    y_top_left = float(config['default']['border_top']) * cm_to_pixel
+
+    x_bottom_right = pageWidth - (float(config['default']['border_right']) * cm_to_pixel)
+    y_bottom_right = pageHeight - (float(config['default']['border_bottom']) * cm_to_pixel)
     
-    percentageOfWidth = pageWidth * 0.15
-    percentageOfHeight = pageHeight * 0.1
-    r1 = fitz.Rect(0 + percentageOfWidth , 0 + percentageOfWidth,pageWidth - percentageOfWidth,pageHeight-percentageOfHeight)
+    r1 = fitz.Rect(x_top_left , y_top_left,x_bottom_right,y_bottom_right)
 
     coordBorder  = {
                 "bottom_left": {"x" : r1.bottom_left.x, "y" : r1.bottom_left.y},
@@ -25,8 +33,8 @@ def calcPdfBorder(pathOfPdf):
     #shape.draw_rect(r1)
     #shape.finish(width=0.3)
     #shape.commit()
-    #doc.save("C:\\Users\\Schall\\Documents\\Bachelorarbeit\\imageAnalyzer\\main\\resources\\coordTest2.pdf")
-    doc.close()
+    #doc.saveIncr()
+    #doc.close()
     return coordBorder
 
 def isImageInsideBorder(imageDetailList, pathOfPdf):

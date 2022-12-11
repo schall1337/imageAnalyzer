@@ -15,9 +15,12 @@ from imageAnalzyer_colorCheck import colorCheck
 from imageAnalyzer_reportBuilder import createReport
 
 import json
+import configparser
+config = configparser.ConfigParser()
+config.read('config-file.ini')
 
-#pathOfPdf = "../resources/testdokumentBachelorCompressed.pdf"
-pathOfPdf = "../resources/TestLibre.pdf"
+pathOfPdf = "../resources/testdokumentBachelorCompressed.pdf"
+#pathOfPdf = "../resources/Bachelorarbeit_Daniel_Schall.pdf"
 
 # data retrieval
 imageDetailList = getImageDetailList(pathOfPdf)
@@ -30,7 +33,7 @@ getImagesFromLayoutParser(pdfPagesAsImageList)
 extractWordsFromImage(pdfPagesAsImageList)
 
 # data analysis
-reverseImageSearcher(imageDetailList)
+#reverseImageSearcher(imageDetailList)
 isImageInsideBorder(imageDetailList, pathOfPdf)
 calcQualityMetrics(imageDetailList)
 
@@ -41,9 +44,10 @@ colorCheck(pdfPagesAsImageList)
 generateAnnotation(pathOfPdf, imageDetailList, pdfPagesAsImageList)
 createReport(imageDetailList, pdfPagesAsImageList)
 
-deleteTmpFiles()
+if int(config['default']['debug_mode']) == 1:
+    deleteTmpFiles()
 
-print(json.dumps(pdfPagesAsImageList))
+#print(json.dumps(pdfPagesAsImageList))
+print(json.dumps(imageDetailList))
 print("\n")
-#print(json.dumps(imageDetailList))
 print("End")

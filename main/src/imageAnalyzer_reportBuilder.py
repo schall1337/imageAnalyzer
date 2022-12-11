@@ -6,10 +6,15 @@ from reportlab.platypus import Table
 from reportlab.platypus import TableStyle
 from reportlab.lib import colors
 
+import configparser
+
 import fitz
 
 
 def createReport(imageDetailList, pdfPagesAsImageList):
+
+    config = configparser.ConfigParser()
+    config.read('config-file.ini')
 
     reportData = {
         "layoutParserSize": 0,
@@ -17,11 +22,10 @@ def createReport(imageDetailList, pdfPagesAsImageList):
         "jpegFormat": 0,
         "lowPPI": 0,
         "closeToBorder": 0,
-        "blockyArtifacts": 0,
+        "jpegQualityScore": 0,
         "spellingErrors": 0,
         "metaData": 0,
         "webDetection": 0,
-        "blockyArtifacts": 0,
         "smallFontSize": 0,
         "bigImgSize": 0,
         "lowContrast": 0
@@ -33,19 +37,19 @@ def createReport(imageDetailList, pdfPagesAsImageList):
         if img["imageExt"] == "jpg" or img["imageExt"] == "jpeg":
             reportData["jpegFormat"] += 1
 
-        if int(img["x-ppi"]) < 300 or int(img["y-ppi"]) < 300:
+        if int(img["x-ppi"]) < int(config['default']['min_ppi']) or int(img["y-ppi"]) < int(config['default']['min_ppi']):
             reportData["lowPPI"] += 1
 
         if img["exif"]:
             reportData["metaData"] += 1
 
-        if img["imageAnalysis"]["blockinessScore"] < 6:
-            reportData["blockyArtifacts"] += 1
+        if img["imageAnalysis"]["jpegQualityScore"] < int(config['default']['jpeg_quality_score']):
+            reportData["jpegQualityScore"] += 1
 
         if img["imageAnalysis"]["reverseImageDetection"] and img["imageAnalysis"]["reverseImageDetection"]["countPagesWithMatchingImages"]:
             reportData["webDetection"] += 1
 
-        if img["size"]["size"] > 3000:
+        if img["size"]["size"] > int(config['default']['max_image_size']):
             reportData["bigImgSize"] += 1
 
     for page in pdfPagesAsImageList:
@@ -55,7 +59,7 @@ def createReport(imageDetailList, pdfPagesAsImageList):
             if img["imageAnalysis"]["spellingErrors"]:
                 reportData["spellingErrors"] += 1
 
-            if img["imageAnalysis"]["minWordHeight"] <= 8:
+            if img["imageAnalysis"]["minWordHeight"] is not None and img["imageAnalysis"]["minWordHeight"] <= int(config['default']['min_pixel_height']):
                 reportData["smallFontSize"] += 1
 
             if img["imageAnalysis"]["isTooCloseToBorder"]:
@@ -73,11 +77,11 @@ def createReport(imageDetailList, pdfPagesAsImageList):
          reportData['internalPDFSize'], 'Nur Rastergrafiken'],
         ['3. Bilder im JPEG Format', reportData["jpegFormat"],
             'Können aufgrund von Kompressionen\neine geringe Qualität aufweisen'],
-        ['4. Bilder mit weniger als 300 PPI', reportData['lowPPI'],
+        ['4. Bilder mit weniger als '+config['default']['min_ppi']+' PPI', reportData['lowPPI'],
             'Empfohlene Anzahl für Printmedien'],
         ['5. Bilder zu nah am Rand', reportData['closeToBorder'],
             'Werden ggf. nicht vollständig gedruckt'],
-        ['6. Bilder mit hohen Anteil\n    an Blockartefakten', reportData['blockyArtifacts'],
+        ['6. Bilder mit hohen Anteil\n    an Blockartefakten', reportData['jpegQualityScore'],
             'Bildqualität kann durch Blackartefakte\nstark eingeschränkt sein'],
         ['7. Bilder mit Rechtschreibfehlern', reportData['spellingErrors'],
             'Überprüfen Sie die annotierten Bilder\nauf Rechtschreibfehler'],
@@ -85,9 +89,9 @@ def createReport(imageDetailList, pdfPagesAsImageList):
             'Metadaten können sensible Informationen\nenhalten (GPS Koordinaten etc.)'],
         ['9. Bilder im Internet gefunden', reportData['webDetection'],
             'Beachten Sie eine richtige Quellenangabe'],
-        ['10. Bilder mit kleiner Schriftgröße (< 8px)', reportData['smallFontSize'],
+        ['10. Bilder mit kleiner Schriftgröße (< '+config['default']['min_pixel_height']+'px)', reportData['smallFontSize'],
          'Beachten Sie eine adequate Schriftgröße\nfür eine bessere Leserlichkeit'],
-        ['11. Bilder mit hoher Dateigröße (> 3 MB)', reportData['bigImgSize'],
+        ['11. Bilder mit hoher Dateigröße (> '+config['default']['max_image_size']+' KB)', reportData['bigImgSize'],
          'Vielzahl an großen Bildern\nkann die PDF Dateigröße sehr groß\nwerden lassen'],
         ['12. Bilder mit geringem Farbkontrast (< 3 nach WCAG Standard)',
          reportData['lowContrast'], "Achten Sie auf eine gute Farbwahl"]

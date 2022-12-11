@@ -1,7 +1,12 @@
 import fitz
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config-file.ini')
 
 def generateAnnotation(pathOfPdf, imageDetailList, pdfPagesAsImageList):
     doc = fitz.open(pathOfPdf)
+
     generateAnnotationImageDetailList(imageDetailList, doc)
     generateAnnotationPdfPagesAsImageList(pdfPagesAsImageList, doc)
 
@@ -10,7 +15,7 @@ def generateAnnotation(pathOfPdf, imageDetailList, pdfPagesAsImageList):
 
 ###PagesAsImageList
 def generateAnnotationPdfPagesAsImageList(pdfPagesAsImageList, doc):
-    MIN_CHAR_HEIGHT = 8
+
     for pdfImgPage in pdfPagesAsImageList:
         if pdfImgPage["figures"]:
             x_offset = 0
@@ -29,8 +34,8 @@ def generateAnnotationPdfPagesAsImageList(pdfPagesAsImageList, doc):
                 if figure["imageAnalysis"]["spellingErrors"]:
                     outputTextList.append(getspellingErrors(figure))
                 
-                if figure["imageAnalysis"]["minWordHeight"] <= MIN_CHAR_HEIGHT:
-                    outputTextList.append(getSmallCharacterInformation(figure, MIN_CHAR_HEIGHT))
+                if figure["imageAnalysis"]["minWordHeight"] is not None and figure["imageAnalysis"]["minWordHeight"] <= int(config['default']['min_pixel_height']):
+                    outputTextList.append(getSmallCharacterInformation(figure, int(config['default']['min_pixel_height'])))
 
                 if figure["imageAnalysis"]["isTooCloseToBorder"]:
                     outputTextList.append(getTooCloseToBorderInfo())
@@ -105,7 +110,7 @@ def generateAnnotationImageDetailList(imageDetailList, doc):
 
         # outputText
         outputTextList.append(getGeneralInformation(imageDetail))
-        outputTextList.append(getBlockinessInformation(imageDetail))
+        outputTextList.append(getJpegQualityScoreInformation(imageDetail))
         outputTextList.append(getPiqeInformation(imageDetail))
         if imageDetail["exif"]:
             outputTextList.append(getExifData(imageDetail["exif"]))
@@ -128,7 +133,7 @@ def getPiqeInformation(imageDetail):
     Je höher der Score, desto schlechter ist die Qualität des Bildes.
     Werte unter 50 werden als gut wahrgenommen.
 
-    Schärfescore: {piqeScore}
+    PIQE Score: {piqeScore}
 
     Weitere Informationen unter
     https://de.mathworks.com/help/images/ref/piqe.html
@@ -170,32 +175,32 @@ def getExifData(imageDetailExif):
     
     return outputExif
 
-def getBlockinessInformation(imageDetail):
-    blockinessScore = int(imageDetail["imageAnalysis"]["blockinessScore"])
-    outputBlockiness = """
+def getJpegQualityScoreInformation(imageDetail):
+    jpegQualityScore = int(imageDetail["imageAnalysis"]["jpegQualityScore"])
+    outputJpegQualityScore = """
     Kompressionsinformation
 
-    Der Blockartefaktescore gibt an, wie stark die Blockartefakte im Bild vertreten sind.
-    Blockartefakte entstehen durch zu hohe Kompressionsraten. Der Score ist auf einer
+    Der JPEG-Qualityscore gibt an, wie stark Kompressionsartefakte im Bild vertreten sind.
+    Kompressionsartefakte entstehen durch zu hohe Kompressionsraten. Der Score ist auf einer
     Skala von 1 bis 10 ausgelegt (1 sehr schlecht, 10 sehr gut).
 
-    Blockartefaktescore: {blockinessScore}
+    JPEG-Qualityscore: {jpegQualityScore}
 
     Hinweis:
-    """.format(blockinessScore=blockinessScore)
+    """.format(jpegQualityScore=jpegQualityScore)
 
-    if blockinessScore < 6:
-        outputBlockiness += """
-        Der berechnete Score ist unter der Schwelle von '6'.
+    if jpegQualityScore < int(config['default']['jpeg_quality_score']):
+        outputJpegQualityScore += """
+        Der berechnete Score ist unter der Schwelle von """+config['default']['jpeg_quality_score']+""".
         Überprüfen Sie, ob offensichtliche Kompressionartefakte sichtbar sind.
         """
     else:
-        outputBlockiness += """
-        Der berechnete Score ist über der Schwelle von '6'.
+        outputJpegQualityScore += """
+        Der berechnete Score ist über der Schwelle von """+config['default']['jpeg_quality_score']+""".
         Es scheinen keine offensichtlichen Kompressionartefakte vorhanden zu sein.
         """
     
-    return outputBlockiness
+    return outputJpegQualityScore
 
 def getGeneralInformation(imageDetail):
     dateiendung = imageDetail["imageExt"].upper()
@@ -230,15 +235,15 @@ def getGeneralInformation(imageDetail):
         allgemeineHinweise.append(
             "- Bei der Benutztung des JPEG-Formats kann es zu hohen Qualitätsverlusten kommen")
     
-    if x_ppi < 300:
+    if x_ppi < int(config['default']['min_ppi']):
         allgemeineHinweise.append(
-            "- Die horizontale Auflösung beträgt weniger als 300 ppi (Optimal min. 300 ppi)")
+            "- Die horizontale Auflösung beträgt weniger als " + config['default']['min_ppi'] + " ppi (Optimal min. 300 ppi)")
     
-    if y_ppi < 300:
-        allgemeineHinweise.append("- Die vertikale Auflösung beträgt weniger als 300 ppi (Optimal min. 300 ppi)")
+    if y_ppi < int(config['default']['min_ppi']):
+        allgemeineHinweise.append("- Die vertikale Auflösung beträgt weniger als " + config['default']['min_ppi'] +" ppi (Optimal min. 300 ppi)")
     
-    if groesse > 3000:
-        allgemeineHinweise.append("- Bildgröße überschreitet 3 MB")
+    if groesse > int(config['default']['max_image_size']):
+        allgemeineHinweise.append("- Bildgröße überschreitet " + config['default']['max_image_size'] +" MB")
     
     if angezeigteBreite > breite:
         allgemeineHinweise.append("- Gerenderte Breite ist größer als originale Breite (Bild ggf. unscharf)")

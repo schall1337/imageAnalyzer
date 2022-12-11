@@ -1,9 +1,13 @@
 import layoutparser as lp
 from PIL import Image
 import numpy as np
+import configparser
 
 
 def getImagesFromLayoutParser(pdfPagesAsImageList):
+
+    config = configparser.ConfigParser()
+    config.read('config-file.ini')
     # precise modell
     """ model = lp.Detectron2LayoutModel('lp://PubLayNet/mask_rcnn_X_101_32x8d_FPN_3x/config', 
                                      extra_config=["MODEL.ROI_HEADS.SCORE_THRESH_TEST", 0.8],
@@ -17,11 +21,19 @@ def getImagesFromLayoutParser(pdfPagesAsImageList):
     for index_page, pdfImagePage in enumerate(pdfPagesAsImageList, start=1):
         pageWidth = pdfImagePage["pixMap"]["width"]
         pageHeight = pdfImagePage["pixMap"]["height"]
-        percentageOfWidth = pageWidth * 0.15
-        percentageOfHeight = pageHeight * 0.1
+        #percentageOfWidth = pageWidth * 0.15
+        #percentageOfHeight = pageHeight * 0.1
 
-        borderBox = lp.elements.Rectangle(
-            0 + percentageOfWidth, 0 + percentageOfHeight, pageWidth - percentageOfWidth, pageHeight - percentageOfHeight)
+        #1cm = 56px at 144 dpi
+        cm_to_pixel = 56
+
+        x_top_left = float(config['default']['border_left']) * cm_to_pixel
+        y_top_left = float(config['default']['border_top']) * cm_to_pixel
+
+        x_bottom_right = pageWidth - (float(config['default']['border_right']) * cm_to_pixel)
+        y_bottom_right = pageHeight - (float(config['default']['border_bottom']) * cm_to_pixel)
+
+        borderBox = lp.elements.Rectangle(x_top_left , y_top_left,x_bottom_right,y_bottom_right)
 
         pdfPageAsImg = Image.open(
             path + pdfImagePage["fileName"]).convert('RGB')

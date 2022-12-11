@@ -4,7 +4,8 @@ def extractImages(imageDetailList, pdfFile):
     pdf_file = fitz.open(pdfFile)
 
     for image_index, image in enumerate(imageDetailList, start=0):
-        base_image = pdf_file.extract_image(int(image["object"]))
+        objectId = int(image["object"])
+        base_image = pdf_file.extract_image(objectId)
         image_bytes = base_image["image"]
         # get the image extension
         image_ext = base_image["ext"]
