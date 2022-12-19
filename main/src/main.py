@@ -18,6 +18,7 @@ from imageAnalyzer_colorCheckPrimitive import colorCheckPrimitive
 import configparser
 import sys
 
+
 def run():
 
     deleteTmpFiles()
