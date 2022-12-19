@@ -1,18 +1,28 @@
 imagePath = "../../tmp/"
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config-file.ini')
+API_KEY = config['API']['api_google_key']
 
 def reverseImageSearcher(imageDetailList):
+    if API_KEY:
+        for imageDetail in imageDetailList:
+            reverseImageDetails = detect_web(imagePath + imageDetail["fileName"])
+            imageDetail["imageAnalysis"]["reverseImageDetection"] = reverseImageDetails
+        return imageDetailList
+    else:
+        print("NO GOOGLE API KEY FOUND - PROCEED WITHOUT REVERSE IMAGE SEARCH")
 
-    for imageDetail in imageDetailList:
-        reverseImageDetails = detect_web(imagePath + imageDetail["fileName"])
-        imageDetail["imageAnalysis"]["reverseImageDetection"] = reverseImageDetails
-    return imageDetailList
 
 def detect_web(path):
     """Detects web annotations given an image."""
     from google.cloud import vision
     import io
     import os
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../../key_api_google/api_google_key.json"
+
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = API_KEY
+
     client = vision.ImageAnnotatorClient()
 
     reverseImageDetails = {
