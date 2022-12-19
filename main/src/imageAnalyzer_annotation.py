@@ -141,7 +141,7 @@ def generateAnnotationImageDetailList(imageDetailList, doc):
 def getPiqeInformation(imageDetail):
     piqeScore = int(imageDetail["imageAnalysis"]["piqeScore"])
     output = """
-    PIQE Score (Perception-based Image QUality Evaluator)
+    PIQE Score (Perception-based Image Quality Evaluator)
 
     Der PIQE Score gibt die Verzerrung eines Bildes aufgrund von Blockartefakte
     und Gaußsches Rauschen an.

@@ -70,7 +70,7 @@ def createReport(imageDetailList, pdfPagesAsImageList):
 
     tableData = [
         ['Report der automatischen Bildqualitätsanalyse', '', ''],
-        ['Merkmal', 'Wert', 'Hinweis'],
+        ['Merkmal', 'Anzahl', 'Hinweis'],
         ['1. Bilder entdeckt (Layout Parser)', reportData['layoutParserSize'],
          'Können sowohl Rastergrafiken als auch\nVektorgrafiken sein'],
         ['2. Bilder entdeckt (Analyse PDF Struktur)',
@@ -82,7 +82,7 @@ def createReport(imageDetailList, pdfPagesAsImageList):
         ['5. Bilder zu nah am Rand', reportData['closeToBorder'],
             'Werden ggf. nicht vollständig gedruckt'],
         ['6. Bilder mit hohen Anteil\n    an Blockartefakten', reportData['jpegQualityScore'],
-            'Bildqualität kann durch Blackartefakte\nstark eingeschränkt sein'],
+            'Bildqualität kann durch Blockartefakte\nstark eingeschränkt sein'],
         ['7. Bilder mit Rechtschreibfehlern', reportData['spellingErrors'],
             'Überprüfen Sie die annotierten Bilder\nauf Rechtschreibfehler'],
         ['8. Bilder mit Metadaten', reportData['metaData'],

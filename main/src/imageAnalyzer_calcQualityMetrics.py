@@ -6,8 +6,9 @@ def calcQualityMetrics(imageDetailList):
     for imageDetail in imageDetailList:
         fileName = "../../tmp/" + imageDetail["fileName"]
 
-        blockinessScore = eng.jpeg_quality_score(fileName)
-        imageDetail["imageAnalysis"]["jpegQualityScore"] = blockinessScore
+        jpegQualityScore = eng.jpeg_quality_score(fileName)
+
+        imageDetail["imageAnalysis"]["jpegQualityScore"] = jpegQualityScore
 
         piqeScore = eng.piqe_score(fileName)
         imageDetail["imageAnalysis"]["piqeScore"] = piqeScore

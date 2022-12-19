@@ -1,10 +1,6 @@
 from haishoku.haishoku import Haishoku
 import wcag_contrast_ratio as contrast
 
-haishoku = Haishoku.loadHaishoku("../../tmp/MuPDF_image0.jpeg")
-
-
-
 def colorCheckPrimitive(pdfPagesAsImageList):
     for pdfPage in pdfPagesAsImageList:
         for figure in pdfPage["figures"]:

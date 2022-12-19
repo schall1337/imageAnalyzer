@@ -15,42 +15,56 @@ from imageAnalzyer_colorCheck import colorCheck
 from imageAnalyzer_reportBuilder import createReport
 from imageAnalyzer_colorCheckPrimitive import colorCheckPrimitive
 
-
-import json
 import configparser
-config = configparser.ConfigParser()
-config.read('config-file.ini')
+import sys
 
-pathOfPdf = "../resources/testdokumentBachelorCompressed.pdf"
-#pathOfPdf = "../resources/Bachelorarbeit_Daniel_Schall.pdf"
+def run():
 
-# data retrieval
-imageDetailList = getImageDetailList(pathOfPdf)
-extractImages(imageDetailList, pathOfPdf)
-getImageCoordinates(imageDetailList, pathOfPdf)
-extractExif(imageDetailList)
-
-pdfPagesAsImageList = convertPdfPageToImg(pathOfPdf)
-getImagesFromLayoutParser(pdfPagesAsImageList)
-extractWordsFromImage(pdfPagesAsImageList)
-
-# data analysis
-#reverseImageSearcher(imageDetailList)
-isImageInsideBorder(imageDetailList, pathOfPdf)
-calcQualityMetrics(imageDetailList)
-
-wordAnalysis(pdfPagesAsImageList)
-colorCheck(pdfPagesAsImageList)
-colorCheckPrimitive(pdfPagesAsImageList)
-
-# data output (annotation in pdf)
-generateAnnotation(pathOfPdf, imageDetailList, pdfPagesAsImageList)
-createReport(imageDetailList, pdfPagesAsImageList)
-
-if int(config['default']['debug_mode']) == 0:
     deleteTmpFiles()
+    # -------------data retrieval-------------
+    imageDetailList = getImageDetailList(pathOfPdf)
 
-print(json.dumps(pdfPagesAsImageList))
-#print(json.dumps(imageDetailList))
-print("\n")
-print("End")
+    extractImages(imageDetailList, pathOfPdf)
+
+    getImageCoordinates(imageDetailList, pathOfPdf)
+
+    extractExif(imageDetailList)
+
+    pdfPagesAsImageList = convertPdfPageToImg(pathOfPdf)
+
+    getImagesFromLayoutParser(pdfPagesAsImageList)
+
+    extractWordsFromImage(pdfPagesAsImageList)
+
+    # -------------data analysis-------------
+
+    # reverseImageSearcher(imageDetailList)
+
+    isImageInsideBorder(imageDetailList, pathOfPdf)
+
+    calcQualityMetrics(imageDetailList)
+
+    wordAnalysis(pdfPagesAsImageList)
+
+    colorCheck(pdfPagesAsImageList)
+
+    colorCheckPrimitive(pdfPagesAsImageList)
+
+    # -------------data output (annotation in pdf)-------------
+    generateAnnotation(pathOfPdf, imageDetailList, pdfPagesAsImageList)
+
+    createReport(imageDetailList, pdfPagesAsImageList)
+
+    if int(config['default']['debug_mode']) == 0:
+        deleteTmpFiles()
+
+
+if len(sys.argv) > 1:
+    pathOfPdf = sys.argv[1]
+    config = configparser.ConfigParser()
+    config.read('config-file.ini')
+    print("---start prototyp----")
+    run()
+    print("---end prototyp---")
+else:
+    print("no path provided")
