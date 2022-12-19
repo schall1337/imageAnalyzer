@@ -1,2 +1,2 @@
 # imageAnalyzer
-analyzes images in pdf's
+Analyzes quality of images in pdf's
