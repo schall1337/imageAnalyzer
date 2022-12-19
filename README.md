@@ -26,3 +26,9 @@ Analyzes quality of images in pdf's
 
 files 'de_DE_frami.aff' and 'de_DE_frami.dic' [source](https://github.com/LibreOffice/dictionaries/tree/master/de) need to be moved to pyenchant folder
 [...]\enchant\data\mingw64\share\enchant\hunspell
+
+# run
+
+To analyse PDF run main.py file with path of pdf file as parameter
+
+example: python main.py myTestPdf.pdf
