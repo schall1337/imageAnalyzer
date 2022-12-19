@@ -17,9 +17,17 @@ from imageAnalyzer_colorCheckPrimitive import colorCheckPrimitive
 
 import configparser
 import sys
-
+import os, shutil
+import os.path
+from os import path
 
 def run():
+
+    if not path.exists("../../tmp"):
+        os.makedirs("../../tmp")
+
+    if not path.exists("../../output"):
+        os.makedirs("../../output")
 
     deleteTmpFiles()
     # -------------data retrieval-------------
