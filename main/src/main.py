@@ -47,7 +47,7 @@ def run():
 
     # -------------data analysis-------------
 
-    reverseImageSearcher(imageDetailList)
+    #reverseImageSearcher(imageDetailList)
 
     isImageInsideBorder(imageDetailList, pathOfPdf)
 

@@ -84,14 +84,13 @@ def convertSizeToMegabyte(imageSize):
         "size": ""
     }
 
-    match unit:
-        case 'B':
+    if unit == 'B':
             details["size"] = value / 1000
-        case 'K':
+    elif unit == 'K':
             details["size"] = value
-        case 'M':
+    elif unit == 'M':
             details["size"] = value * 1000
-        case 'G':
+    elif unit == 'G':
             details["size"] = value * 1000000
 
     return details

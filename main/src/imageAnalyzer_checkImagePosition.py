@@ -5,7 +5,7 @@ def calcPdfBorder(pathOfPdf):
     config = configparser.ConfigParser()
     config.read('config-file.ini')
     doc = fitz.open(pathOfPdf)
-    page = doc.load_page(2)
+    page = doc.load_page(0)
     rectPage = page.mediabox
 
     pageWidth = rectPage.width
