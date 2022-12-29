@@ -8,11 +8,9 @@ Analyzes quality of images in pdf's
 - poppler pdfimages (0.68.0)
 
 - exif==1.3.5
-- fitz==0.0.1.dev2
 - haishoku==1.1.8
-- layoutparser==0.3.4
-- matlab==0.1
-- numpy==1.23.2
+- layoutparser[effdet]==0.3.4
+- numpy==1.21.6
 - opencv_python==4.6.0.66
 - Pillow==9.3.0
 - protobuf==4.21.12
@@ -21,6 +19,7 @@ Analyzes quality of images in pdf's
 - pytesseract==0.3.10
 - reportlab==3.6.11
 - wcag_contrast_ratio==0.9
+- importlib-metadata==5.2.0
 
 # install (Windows 10)
 Tested Windows 10, Python 3.10 and Matlab R2022b
